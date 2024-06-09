@@ -1,176 +1,258 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-// The main function, entry point of the application
 void main() {
-  // Running the app by passing the instance of MyApp widget
   runApp(const MyApp());
 }
 
-// MyApp class, a StatelessWidget that represents the root of the application
 class MyApp extends StatelessWidget {
-  // Constructor for MyApp
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
-  // The build method required to override for StatelessWidget, it returns the root widget of the application
   @override
   Widget build(BuildContext context) {
-    // MaterialApp widget, provides the core functionality of a material design app
     return MaterialApp(
-      // Title of the application
-      title: 'shopcare',
-      // Theme data for the application, specifying the primary swatch color
+      title: 'Shopcare',
       theme: ThemeData(
-        //pr
-        primarySwatch: Colors.lightGreen,
+        primarySwatch: Colors.green,
+        scaffoldBackgroundColor: const Color(0xFFF5F5DC),
       ),
-     // Setting debugShowCheckedModeBanner to false removes the debug banner in the app
-      debugShowCheckedModeBanner: false, 
-      // The home page of the application, an instance of MyHomePage widget
-      home: const MyHomePage(title: 'Shopcare Home'),
-    ); // materialApp
+      debugShowCheckedModeBanner: false,
+      home: const HomeScreen(),
+    );
   }
 }
 
-// MyHomePage class, a StatelessWidget representing the home page of the application
-class MyHomePage extends StatelessWidget {
-  // Title of the home page
-  final String title;
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
-  // Constructor for MyHomePage
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // The build method required to override for StatelessWidget, it returns the widget hierarchy of the home page
   @override
   Widget build(BuildContext context) {
-    // Dummy list of categories
-    List<String> categories = [
-      'Lavender & Chamomile',
-      'Peppermint & Eucalyptus',
-      'Citrus & Ginger',
-      'Rosemary & Mint',
-      'Tea Tree & Lavender',
-      'Oatmeal & Honey',
-      
-    ];
-
-    // Scaffold widget, provides a framework for implementing the basic material design visual layout structure of the home page
     return Scaffold(
-      // AppBar widget, represents the app bar at the top of the screen
       appBar: AppBar(
-        // Title of the app bar, centered using the Center widget
-        title: Center(child: Text(title)),
-      ),
-      // GridView.builder widget, builds a grid view with a custom builder
-      body: GridView.builder(
-        // SliverGridDelegate that defines the grid layout
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2, // Number of columns in the grid
-        crossAxisSpacing: 10.0, // Spacing between columns
-        mainAxisSpacing: 10.0, // Spacing between rows
-        childAspectRatio: 2.0, // Aspect ratio of each tile (width / height)
-        ),
-        // Number of items in the grid view
-        itemCount: categories.length,
-        // Builder function that returns the widget for each item in the grid view
-        itemBuilder: (BuildContext context, int index) {
-          // GestureDetector widget, detects gestures on its child and calls onTap callback when tapped
-          return GestureDetector(
-            // onTap callback function called when the category tile is tapped
-            onTap: () {
-              // Handle category tap by printing the tapped category
-              print('Category tapped: ${categories[index]}');
-              // Navigate to categories screen with selected category
+        title: const Text('Shopcare'),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.shopping_cart),
+            onPressed: () {
+              // Navigate to cart screen
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CategoriesScreen(category: categories[index]),
+                  builder: (context) => const CartScreen(),
                 ),
               );
             },
-            // Card widget, represents a material design card containing the category name
-            child: Card(
-              elevation: 3.0,
-              // Centering the category name text within the card
-              child: Center(
-                // Text widget displaying the category name
-                child: Text(
-                  categories[index],
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-          );
-        },
+          ),
+        ],
       ),
+      body: const SoapCategories(),
     );
   }
 }
 
-// CategoriesScreen class, a StatelessWidget representing the screen displaying products for a specific category
-class CategoriesScreen extends StatelessWidget {
-  // Category for which the products are displayed
-  final String category;
+class SoapCategories extends StatelessWidget {
+  const SoapCategories({super.key});
 
-  // Constructor for CategoriesScreen
-  const CategoriesScreen({Key? key, required this.category}) : super(key: key);
-
-  // The build method required to override for StatelessWidget, it returns the widget hierarchy of the categories screen
   @override
   Widget build(BuildContext context) {
-    // Dummy list of products for the selected category
-    List<String> products = [
-      'Hair shampoo',
-      'Scrub',
-      'Face cleanser ',
-      'Body and liquid soap',
-      'Essential oil',
-    ];
-
-    // Scaffold widget, provides a framework for implementing the basic material design visual layout structure of the categories screen
-    return Scaffold(
-      // AppBar widget, represents the app bar at the top of the screen
-      appBar: AppBar(
-        // Title of the app bar, centered using the Center widget
-        title: Text(category),
-        centerTitle: true,
+    return GridView.builder(
+      padding: const EdgeInsets.all(10.0),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 10.0,
+        mainAxisSpacing: 10.0,
+        childAspectRatio: 0.8,
       ),
-      // GridView.builder widget, builds a grid view with a custom builder
-      body: GridView.builder(
-        // SliverGridDelegate that defines the grid layout
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // Number of columns in the grid
-          crossAxisSpacing: 10.0, // Spacing between columns
-          mainAxisSpacing: 10.0, // Spacing between rows
-          childAspectRatio: 1.5, // Aspect ratio of each tile (width / height)
-        ),
-        // Number of items in the grid view
-        itemCount: products.length,
-        // Builder function that returns the widget for each item in the grid view
-        itemBuilder: (BuildContext context, int index) {
-          // GestureDetector widget, detects gestures on its child and calls onTap callback when tapped
-          return GestureDetector(
-            // onTap callback function called when the product tile is tapped
-            onTap: () {
-              // Handle product tap by printing the tapped product
-              print('Product tapped: ${products[index]}');
-            },
-            // Card widget, represents a material design card containing the product name
-            child: Card(
-              elevation: 3.0,
-              // Padding around the product name text within the card
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                // Text widget displaying the product name
-                child: Text(
-                  products[index],
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-                ),
+      itemCount: organicSoapCategories.length,
+      itemBuilder: (BuildContext context, int index) {
+        final Map<String, dynamic> category = organicSoapCategories[index];
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SoapProducts(category: category),
               ),
+            );
+          },
+          child: Card(
+            elevation: 3.0,
+            child: Column(
+              children: [
+                Expanded(
+                  child: Image.network(
+                    category['image']!,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    category['name']!,
+                    style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
             ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+
+class SoapProducts extends StatelessWidget {
+  final Map<String, dynamic> category;
+
+  const SoapProducts({super.key, required this.category});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(category['name']!),
+      ),
+      body: ListView.builder(
+        itemCount: (category['products'] as List<dynamic>).length,
+        itemBuilder: (context, index) {
+          final product = (category['products'] as List<dynamic>)[index] as Map<String, String>;
+          return ListTile(
+            title: Text(product['name']!),
+            subtitle: Text(product['description']!),
+            trailing: Text(product['price']!),
+            onTap: () {
+              // Add the product to the cart
+              _addToCart(context, product);
+            },
           );
         },
       ),
     );
   }
 }
+
+
+  void _addToCart(BuildContext context, Map<String, String> product) {
+    // Implement logic to add the product to the cart
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Item Added to Cart'),
+          content: Text('${product['name']} has been added to your cart.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+class CartScreen extends StatelessWidget {
+  const CartScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Cart'),
+      ),
+      body: const Center(
+        child: Text('Shopping Cart Screen'),
+      ),
+    );
+  }
+}
+
+// Organic Soap Categories and Products
+List<Map<String, dynamic>> organicSoapCategories = [
+  {
+    'name': 'Bar Soaps',
+    'image': 'https://tinyurl.com/5d5bwe8a',
+    'products': [
+      {'name': 'Lavender & Chamomile Bar Soap', 'price': '\$5.99', 'description': 'Relaxing blend of lavender and chamomile'},
+      {'name': 'Peppermint & Eucalyptus Bar Soap', 'price': '\$5.99', 'description': 'Invigorating mix of peppermint and eucalyptus'},
+      {'name': 'Citrus & Ginger Bar Soap', 'price': '\$5.99', 'description': 'Refreshing combination of citrus and ginger'},
+      {'name': 'Rosemary & Mint Bar Soap', 'price': '\$5.99', 'description': 'Revitalizing blend of rosemary and mint'},
+      {'name': 'Tea Tree & Lavender Bar Soap', 'price': '\$5.99', 'description': 'Cleansing synergy of tea tree and lavender'},
+      {'name': 'Oatmeal & Honey Bar Soap', 'price': '\$5.99', 'description': 'Nourishing blend of oatmeal and honey'},
+    ],
+  },
+  {
+    'name': 'Liquid Soaps',
+    'image': 'https://tinyurl.com/2y3hc96z',
+    'products': [
+      {'name': 'Lavender & Chamomile Liquid Soap', 'price': '\$8.99', 'description': 'Soothing lavender and chamomile infusion'},
+      {'name': 'Peppermint & Eucalyptus Liquid Soap', 'price': '\$8.99', 'description': 'Cooling peppermint and eucalyptus blend'},
+      {'name': 'Citrus & Ginger Liquid Soap', 'price': '\$8.99', 'description': 'Zesty citrus with a hint of ginger freshness'},
+      {'name': 'Rosemary & Mint Liquid Soap', 'price': '\$8.99', 'description': 'Herbal rosemary complemented by refreshing mint'},
+      {'name': 'Tea Tree & Lavender Liquid Soap', 'price': '\$8.99', 'description': 'Purifying tea tree combined with calming lavender'},
+      {'name': 'Oatmeal & Honey Liquid Soap', 'price': '\$8.99', 'description': 'Gentle oatmeal and honey nourishment for the skin'},
+    ],
+  },
+  {
+    'name': 'Body Soaps',
+    'image': 'https://tinyurl.com/4kvb6btp',
+    'products': [
+      {'name': 'Lavender & Chamomile Body Soap', 'price': '\$6.99', 'description': 'Calming lavender and chamomile for the body'},
+      {'name': 'Peppermint & Eucalyptus Body Soap', 'price': '\$6.99', 'description': 'Refreshing peppermint and eucalyptus cleanse'},
+      {'name': 'Citrus & Ginger Body Soap', 'price': '\$6.99', 'description': 'Revitalizing citrus and ginger rejuvenation'},
+      {'name': 'Rosemary & Mint Body Soap', 'price': '\$6.99', 'description': 'Invigorating rosemary and mint for a refreshing feel'},
+      {'name': 'Tea Tree & Lavender Body Soap', 'price': '\$6.99', 'description': 'Purifying tea tree with soothing lavender comfort'},
+      {'name': 'Oatmeal & Honey Body Soap', 'price': '\$6.99', 'description': 'Nourishing oatmeal and honey for soft, supple skin'},
+    ],
+  },
+  {
+    'name': 'Face Cleanser',
+    'image': 'https://tinyurl.com/3b5reu78',
+    'products': [
+      {'name': 'Lavender & Chamomile Face Cleanser', 'price': '\$12.99', 'description': 'Gentle cleansing with lavender and chamomile essence'},
+      {'name': 'Peppermint & Eucalyptus Face Cleanser', 'price': '\$12.99', 'description': 'Refreshing face cleanse with peppermint and eucalyptus'},
+      {'name': 'Citrus & Ginger Face Cleanser', 'price': '\$12.99', 'description': 'Revitalizing face wash infused with citrus and ginger'},
+      {'name': 'Rosemary & Mint Face Cleanser', 'price': '\$12.99', 'description': 'Purifying face cleanser with rosemary and mint freshness'},
+      {'name': 'Tea Tree & Lavender Face Cleanser', 'price': '\$12.99', 'description': 'Clarifying face wash with tea tree and lavender benefits'},
+      {'name': 'Oatmeal & Honey Face Cleanser', 'price': '\$12.99', 'description': 'Soothing face cleanse with oatmeal and honey nourishment'},
+    ],
+  },
+  {
+    'name': 'Oils',
+    'image': 'https://tinyurl.com/mbdc4nt9',
+    'products': [
+      {'name': 'Lavender & Chamomile Oil', 'price': '\$15.99', 'description': 'Relaxing massage oil infused with lavender and chamomile'},
+      {'name': 'Peppermint & Eucalyptus Oil', 'price': '\$15.99', 'description': 'Cooling body oil enriched with peppermint and eucalyptus'},
+      {'name': 'Citrus & Ginger Oil', 'price': '\$15.99', 'description': 'Invigorating essential oil blend with citrus and ginger zest'},
+      {'name': 'Rosemary & Mint Oil', 'price': '\$15.99', 'description': 'Revitalizing aroma oil featuring rosemary and mint essence'},
+      {'name': 'Tea Tree & Lavender Oil', 'price': '\$15.99', 'description': 'Purifying oil blend with tea tree and lavender benefits'},
+      {'name': 'Oatmeal & Honey Oil', 'price': '\$15.99', 'description': 'Nourishing body oil with oatmeal and honey hydration'},
+    ],
+  },
+  {
+    'name': 'Scrubs',
+    'image': 'https://tinyurl.com/56ketjmw',
+    'products': [
+      {'name': 'Lavender & Chamomile Body Scrub', 'price': '\$14.99', 'description': 'Gentle exfoliation with lavender and chamomile soothing'},
+      {'name': 'Peppermint & Eucalyptus Body Scrub', 'price': '\$14.99', 'description': 'Refreshing scrub infused with peppermint and eucalyptus freshness'},
+      {'name': 'Citrus & Ginger Body Scrub', 'price': '\$14.99', 'description': 'Revitalizing scrub featuring citrus and ginger rejuvenation'},
+      {'name': 'Rosemary & Mint Body Scrub', 'price': '\$14.99', 'description': 'Invigorating scrub with rosemary and mint revitalization'},
+      {'name': 'Tea Tree & Lavender Body Scrub', 'price': '\$14.99', 'description': 'Purifying scrub blended with tea tree and lavender comfort'},
+      {'name': 'Oatmeal & Honey Body Scrub', 'price': '\$14.99', 'description': 'Nourishing scrub with oatmeal and honey hydration for soft skin'},
+    ],
+  },
+  {
+    'name': 'Shampoos',
+    'image': 'https://tinyurl.com/4edk89yx',
+    'products': [
+      {'name': 'Lavender & Chamomile Shampoo', 'price': '\$10.99', 'description': 'Soothing shampoo with lavender and chamomile care'},
+      {'name': 'Peppermint & Eucalyptus Shampoo', 'price': '\$10.99', 'description': 'Refreshing shampoo infused with peppermint and eucalyptus freshness'},
+      {'name': 'Citrus & Ginger Shampoo', 'price': '\$10.99', 'description': 'Revitalizing shampoo featuring citrus and ginger rejuvenation'},
+      {'name': 'Rosemary & Mint Shampoo', 'price': '\$10.99', 'description': 'Invigorating shampoo with rosemary and mint revitalization'},
+      {'name': 'Tea Tree & Lavender Shampoo', 'price': '\$10.99', 'description': 'Purifying shampoo blended with tea tree and lavender comfort'},
+      {'name': 'Oatmeal & Honey Shampoo', 'price': '\$10.99', 'description': 'Nourishing shampoo with oatmeal and honey hydration for soft hair'},
+    ],
+  },
+];
